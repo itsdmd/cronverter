@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"maptz.regionfolder",
+		"aaron-bond.better-comments",
+		"stackbreak.comment-divider",
+		"oderwat.indent-rainbow",
+		"esbenp.prettier-vscode",
+		"ms-vscode.vscode-typescript-next",
+		"bradlc.vscode-tailwindcss",
+		"rangav.vscode-thunder-client",
+		"antfu.vite"
+	]
+}
