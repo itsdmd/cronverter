@@ -1,4 +1,4 @@
-class inputFormat {
+export class inputFormat {
 	static cron = new inputFormat("cron");
 	static json = new inputFormat("json");
 	static ics = new inputFormat("ics");
@@ -8,7 +8,7 @@ class inputFormat {
 	}
 }
 
-class outputFormat {
+export class outputFormat {
 	static cron = new outputFormat("cron");
 	static json = new outputFormat("json");
 	static ics = new outputFormat("ics");
@@ -17,5 +17,3 @@ class outputFormat {
 		this.format = format;
 	}
 }
-
-export { inputFormat, outputFormat };

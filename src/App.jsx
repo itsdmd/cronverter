@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { parseCron } from "./api/parser/parseCron";
-import { inputFormat, outputFormat } from "./api/parser/parserTypes";
+import { useState } from "react";
+import { parseCron, parseToCron } from "./api/parser/parseCron";
+// import { inputFormat, outputFormat } from "./api/parser/parserTypes";
 
 function App() {
 	const [inputValue, setInputValue] = useState("");
@@ -8,11 +8,12 @@ function App() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		try {
-			const expressions = parseCron(outputFormat.cron, inputValue);
+			const expressions = parseCron(inputValue);
 			if (expressions === undefined) {
 				throw new Error("expressions is undefined");
 			}
 			console.log(expressions);
+			console.log(parseToCron(expressions));
 		} catch (err) {
 			console.error(`${err}`);
 		}

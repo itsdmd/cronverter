@@ -1,26 +1,16 @@
-import { outputFormat } from "./parserTypes";
 // import * as parser from "cron-parser";
 // import { fetch } from "../fetcher/fetcher";
 
 /**
- * Parse crontab entries from inputData into outputFormat object
- * @param {outputFormat} outputFormat
+ * Split crontab entries into time expression, command, and optionally username,
+ * and return a 2D array of [time, command, username] arrays
+ * Can also parse the username field if hasUsernameField is true
  * @param {string} inputData
+ * @param {boolean} hasUsernameField
  * @returns {string[][]}
  */
-export function parseCron(inputData) {
-	const exprArray = extractCronEntries(inputData);
-	return exprArray;
-}
-
-/**
- * Split crontab entries into time expression and command,
- * and return an array of arrays with the time expression and command
- * @param {string} input
- * @returns {string[][]}
- */
-function extractCronEntries(input) {
-	const lines = input.split("\n");
+export function parseCron(inputData, hasUsernameField = false) {
+	const lines = inputData.split("\n");
 
 	const time = lines
 		.filter((line) => {
@@ -37,14 +27,41 @@ function extractCronEntries(input) {
 			return (/^\d/.test(line) || line.startsWith("*")) && line.length > 10;
 		})
 		.map((line) => {
-			// get substring after the 5th space
-			return line.split(" ").slice(5).join(" ");
+			return line
+				.split(" ")
+				.slice(hasUsernameField ? 6 : 5)
+				.join(" ");
 		});
+
+	let usernames = null;
+	if (hasUsernameField) {
+		usernames = lines
+			.filter((line) => {
+				return (/^\d/.test(line) || line.startsWith("*")) && line.length > 10;
+			})
+			.map((line) => {
+				// get substring after the 5th space
+				return line.split(" ")[hasUsernameField ? 5 : 4];
+			});
+	}
 
 	const output = [];
 	for (let i = 0; i < time.length; i++) {
-		output.push([time[i], cmd[i]]);
+		output.push([time[i], cmd[i], hasUsernameField ? usernames[i] : null]);
 	}
 
+	return output;
+}
+
+/**
+ * Parse 2D array into crontab entries
+ * @param {string[][]} inputData
+ * @returns {string}
+ */
+export function parseToCron(inputData) {
+	let output = "";
+	for (let i = 0; i < inputData.length; i++) {
+		output += inputData[i].join(" ") + "\n";
+	}
 	return output;
 }
