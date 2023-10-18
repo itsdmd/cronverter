@@ -1,14 +1,14 @@
 // import * as parser from "cron-parser";
-// import { fetch } from "../fetcher/fetcher";
+import { fetchPlain } from "../fetcher/fetcher";
 
 /**
  * Convert cron into ICA
- * @param {string} inputData
+ * @param {string} inputStr
  * @param {boolean} hasUsernameField
  * @returns {string[][]}
  */
-export function parseCron(inputData, hasUsernameField = false) {
-	const lines = inputData.split("\n");
+export function parseCron(inputStr, hasUsernameField = false) {
+	const lines = inputStr.split("\n");
 
 	const time = lines
 		.filter((line) => {
@@ -47,6 +47,19 @@ export function parseCron(inputData, hasUsernameField = false) {
 	}
 
 	return output;
+}
+
+/**
+ * Convert cron data fetched from URL into ICA
+ * @param {string} url
+ * @param {boolean} hasUsernameField
+ * @returns {string[][]}
+ */
+export async function parseUrlCron(url, hasUsernameField = false) {
+	return await fetchPlain(url).then((response) => {
+		const data = parseCron(response, hasUsernameField);
+		return data;
+	});
 }
 
 /**
