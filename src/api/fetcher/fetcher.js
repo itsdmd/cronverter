@@ -5,8 +5,8 @@
  */
 export async function fetchPlain(url) {
 	try {
-		// fetch plain text data from dataUrl
-		const output = await fetch(dataUrl)
+		// fetch plain text data from url
+		const output = await fetch(url)
 			.then(async (response) => {
 				if (!response.ok) {
 					throw new Error(`HTTP error! status: ${response.status}`);
@@ -16,7 +16,7 @@ export async function fetchPlain(url) {
 				}
 			})
 			.catch((err) => {
-				throw new Error(`Failed to fetch ${dataUrl}: ${err}`);
+				throw new Error(`Failed to fetch ${url}: ${err}`);
 			});
 
 		return output;
