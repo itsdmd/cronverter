@@ -2,9 +2,7 @@
 // import { fetch } from "../fetcher/fetcher";
 
 /**
- * Split crontab entries into time expression, command, and optionally username,
- * and return a 2D array of [time, command, username] arrays
- * Can also parse the username field if hasUsernameField is true
+ * Convert cron into ICA
  * @param {string} inputData
  * @param {boolean} hasUsernameField
  * @returns {string[][]}
@@ -14,11 +12,10 @@ export function parseCron(inputData, hasUsernameField = false) {
 
 	const time = lines
 		.filter((line) => {
-			// filter out lines that don't start with a number or asterisk
+			//? filter out lines that don't start with a number or asterisk
 			return (/^\d/.test(line) || line.startsWith("*")) && line.length > 10;
 		})
 		.map((line) => {
-			// get substring until the 5th space
 			return line.split(" ").slice(0, 5).join(" ");
 		});
 
@@ -40,7 +37,6 @@ export function parseCron(inputData, hasUsernameField = false) {
 				return (/^\d/.test(line) || line.startsWith("*")) && line.length > 10;
 			})
 			.map((line) => {
-				// get substring after the 5th space
 				return line.split(" ")[hasUsernameField ? 5 : 4];
 			});
 	}
@@ -54,7 +50,7 @@ export function parseCron(inputData, hasUsernameField = false) {
 }
 
 /**
- * Parse 2D array into crontab entries
+ * Parse ICA into cron
  * @param {string[][]} inputData
  * @returns {string}
  */
