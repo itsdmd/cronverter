@@ -6,5 +6,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<input.plainTextInput />
 		<input.urlInput />
+		<input.fileInput />
 	</React.StrictMode>
 );
