@@ -4,12 +4,14 @@ import { parseFactory } from "../api/parser/parser";
 
 export function plainTextInput() {
 	const [inputValue, setInputValue] = useState("");
+	const [inputType, setInputType] = useState(dataFormat.CRON);
+	const [outputType, setOutputType] = useState(dataFormat.JSON);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		try {
-			const inputObj = new dataObj(dataFormat.CRON, inputValue);
-			let outputObj = new dataObj(dataFormat.ICA);
+			const inputObj = new dataObj(inputType, inputValue);
+			const outputObj = new dataObj(outputType);
 			parseFactory(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
@@ -17,18 +19,48 @@ export function plainTextInput() {
 		}
 	};
 
-	const handleInputChange = (event) => {
+	const handleInputValueChange = (event) => {
 		setInputValue(event.target.value);
+	};
+
+	const handleInputTypeSelectChange = (event) => {
+		setInputType(event.target.value);
+	};
+
+	const handleOutputTypeSelectChange = (event) => {
+		setOutputType(event.target.value);
 	};
 
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
 				<label>
-					Input:
+					From:
+					<select
+						value={inputType}
+						onChange={handleInputTypeSelectChange}
+					>
+						<option value={dataFormat.CRON}>CRON</option>
+						<option value={dataFormat.JSON}>JSON</option>
+						<option value={dataFormat.ICS}>ICS / ICAL</option>
+					</select>
+				</label>
+				<label>
+					To:
+					<select
+						value={outputType}
+						onChange={handleOutputTypeSelectChange}
+					>
+						<option value={dataFormat.CRON}>CRON</option>
+						<option value={dataFormat.JSON}>JSON</option>
+						<option value={dataFormat.ICS}>ICS / ICAL</option>
+					</select>
+				</label>
+				<label>
+					Input Value:
 					<textarea
 						value={inputValue}
-						onChange={handleInputChange}
+						onChange={handleInputValueChange}
 						placeholder="0 0 1 1 * sh ~/somecmd.sh"
 					/>
 				</label>
@@ -40,12 +72,14 @@ export function plainTextInput() {
 
 export function urlInput() {
 	const [inputValue, setInputValue] = useState("");
+	const [inputType, setInputType] = useState(dataFormat.URL_CRON);
+	const [outputType, setOutputType] = useState(dataFormat.JSON);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const inputObj = new dataObj(dataFormat.URL_CRON, inputValue);
-			const outputObj = new dataObj(dataFormat.ICA);
+			const inputObj = new dataObj(inputType, inputValue);
+			const outputObj = new dataObj(outputType);
 			await parseFactory(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
@@ -53,18 +87,48 @@ export function urlInput() {
 		}
 	};
 
-	const handleInputChange = (event) => {
+	const handleInputValueChange = (event) => {
 		setInputValue(event.target.value);
+	};
+
+	const handleInputTypeSelectChange = (event) => {
+		setInputType(event.target.value);
+	};
+
+	const handleOutputTypeSelectChange = (event) => {
+		setOutputType(event.target.value);
 	};
 
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
 				<label>
-					Input:
+					From:
+					<select
+						value={inputType}
+						onChange={handleInputTypeSelectChange}
+					>
+						<option value={dataFormat.URL_CRON}>CRON</option>
+						<option value={dataFormat.URL_JSON}>JSON</option>
+						<option value={dataFormat.URL_ICS}>ICS / ICAL</option>
+					</select>
+				</label>
+				<label>
+					To:
+					<select
+						value={outputType}
+						onChange={handleOutputTypeSelectChange}
+					>
+						<option value={dataFormat.CRON}>CRON</option>
+						<option value={dataFormat.JSON}>JSON</option>
+						<option value={dataFormat.ICS}>ICS / ICAL</option>
+					</select>
+				</label>
+				<label>
+					Input Value:
 					<input
 						value={inputValue}
-						onChange={handleInputChange}
+						onChange={handleInputValueChange}
 						placeholder="https://example.com/cron.txt"
 					/>
 				</label>
@@ -76,6 +140,8 @@ export function urlInput() {
 
 export function fileInput() {
 	const [fileData, setFileData] = useState(null);
+	const [inputType, setInputType] = useState(dataFormat.CRON);
+	const [outputType, setOutputType] = useState(dataFormat.JSON);
 
 	const handleDrop = (event) => {
 		event.preventDefault();
@@ -89,6 +155,14 @@ export function fileInput() {
 
 	const handleDragOver = (event) => {
 		event.preventDefault();
+	};
+
+	const handleInputTypeSelectChange = (event) => {
+		setInputType(event.target.value);
+	};
+
+	const handleOutputTypeSelectChange = (event) => {
+		setOutputType(event.target.value);
 	};
 
 	const handleAdd = (event) => {
@@ -109,9 +183,9 @@ export function fileInput() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const inputObj = new dataObj(dataFormat.CRON, fileData.data);
-			const outputObj = new dataObj(dataFormat.ICA);
-			await parseFactory(inputObj, outputObj);
+			const inputObj = new dataObj(inputType, fileData.data);
+			const outputObj = new dataObj(outputType);
+			parseFactory(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
 			console.error(`${err}`);
@@ -139,6 +213,28 @@ export function fileInput() {
 				</div>
 			) : (
 				<div>
+					<label>
+						From:
+						<select
+							value={inputType}
+							onChange={handleInputTypeSelectChange}
+						>
+							<option value={dataFormat.CRON}>CRON</option>
+							<option value={dataFormat.JSON}>JSON</option>
+							<option value={dataFormat.ICS}>ICS / ICAL</option>
+						</select>
+					</label>
+					<label>
+						To:
+						<select
+							value={outputType}
+							onChange={handleOutputTypeSelectChange}
+						>
+							<option value={dataFormat.CRON}>CRON</option>
+							<option value={dataFormat.JSON}>JSON</option>
+							<option value={dataFormat.ICS}>ICS / ICAL</option>
+						</select>
+					</label>
 					<h3>Drop a file here</h3>
 					<button onClick={handleAdd}>Add</button>
 				</div>

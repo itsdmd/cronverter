@@ -4,8 +4,15 @@ import { fetchPlain } from "../fetcher/fetcher";
  * Convert JSON plain string into ICA
  * @param {string} inputStr
  * @returns {string[][]}
+ * @example parseJsonStr('{"time":"* * * * *","cmd":"echo hello","username":null}')
+ * @example parseJsonStr('{"0":{"time":"* * * * *","cmd":"echo su says hello","username":su},"1":{"time":"*\/2 * * * *","cmd":"echo goodbye from sudo","username":sudo}}')
  */
 export function parseJsonStr(inputStr) {
+	const inputObj = JSON.parse(inputStr);
+	const output = [];
+	for (const [key, value] of Object.entries(inputObj)) {
+		output.push([value.time, value.cmd, value.username]);
+	}
 	return output;
 }
 
@@ -15,32 +22,42 @@ export function parseJsonStr(inputStr) {
  * @returns {string[][]}
  */
 export function parseJsonObj(inputObj) {
-	const inputStr = JSON.stringify(inputObj);
-	return parseJsonStr(inputStr);
+	return parseJsonStr(JSON.stringify(inputObj));
 }
 
 /**
  * Convert JSON data fetched from URL into ICA
  * @param {string} url
- * @param {boolean} hasUsernameField
  * @returns {string[][]}
  */
-export async function parseUrlCron(url) {
+export async function parseUrlJson(url) {
 	return await fetchPlain(url).then((response) => {
-		const data = parseCron(response, hasUsernameField);
+		const data = parseJsonStr(response);
 		return data;
 	});
 }
 
 /**
- * Parse ICA into JSON
+ * Parse ICA into JSON object
  * @param {string[][]} inputData
- * @returns {string}
+ * @returns {{time: string, cmd: string, username: string}[]} JSON object
  */
-export function parseToCron(inputData) {
-	let output = "";
+export function parseToJsonObj(inputData) {
+	let output = {};
 	for (let i = 0; i < inputData.length; i++) {
-		output += inputData[i].join(" ") + "\n";
+		const time = inputData[i][0];
+		const cmd = inputData[i][1];
+		const username = inputData[i][2];
+		output[i] = { time: time, cmd: cmd, username: username };
 	}
 	return output;
+}
+
+/**
+ * Parse ICA into JSON plain string
+ * @param {string[][]} inputData
+ * @returns {string} JSON plain string
+ */
+export function parseToJsonStr(inputData) {
+	return JSON.stringify(parseToJsonObj(inputData));
 }

@@ -1,6 +1,6 @@
 import { dataFormat, dataObj } from "./parserTypes";
-import { parseCron, parseUrlCron, parseToCron } from "./parseCron";
-// import { parseJson } from "./parseJson";
+import * as parseCron from "./parseCron";
+import * as parseJson from "./parseJson";
 // import { parseIcs } from "./parseIcs";
 
 /**
@@ -16,17 +16,24 @@ export async function parseFactory(input, output, hasUsernameField = false) {
 		case dataFormat.ICA:
 			break;
 		case dataFormat.CRON:
-			interData = parseCron(input.data, hasUsernameField);
+			interData = parseCron.parseCron(input.data, hasUsernameField);
 			break;
 		case dataFormat.URL_CRON:
 			interData = await new Promise((resolve) => {
-				parseUrlCron(input.data, hasUsernameField).then((data) => {
+				parseCron.parseUrlCron(input.data, hasUsernameField).then((data) => {
 					resolve(data);
 				});
 			});
 			break;
 		case dataFormat.JSON:
-			// interData = parseJson(input.data, hasUsernameField);
+			interData = parseJson.parseJsonStr(input.data);
+			break;
+		case dataFormat.URL_JSON:
+			interData = await new Promise((resolve) => {
+				parseJson.parseUrlJson(input.data).then((data) => {
+					resolve(data);
+				});
+			});
 			break;
 		case dataFormat.ICS:
 			// interData = parseIcs(input.data, hasUsernameField);
@@ -41,10 +48,10 @@ export async function parseFactory(input, output, hasUsernameField = false) {
 			output.data = interData;
 			break;
 		case dataFormat.CRON:
-			output.data = parseToCron(interData);
+			output.data = parseCron.parseToCron(interData);
 			break;
 		case dataFormat.JSON:
-			// output.data = parseToJson(interData);
+			output.data = parseJson.parseToJsonStr(interData);
 			break;
 		case dataFormat.ICS:
 			// output.data = parseToIcs(interData);
