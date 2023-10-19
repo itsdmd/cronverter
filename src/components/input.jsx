@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { dataFormat, dataObj } from "../api/parser/parserTypes";
-import { parseFactory } from "../api/parser/parser";
+import { converter } from "../api/parser/converter";
 
 export function plainTextInput() {
 	const [inputValue, setInputValue] = useState("");
@@ -12,7 +12,7 @@ export function plainTextInput() {
 		try {
 			const inputObj = new dataObj(inputType, inputValue);
 			const outputObj = new dataObj(outputType);
-			parseFactory(inputObj, outputObj);
+			converter(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
 			console.error(`${err}`);
@@ -80,7 +80,7 @@ export function urlInput() {
 		try {
 			const inputObj = new dataObj(inputType, inputValue);
 			const outputObj = new dataObj(outputType);
-			await parseFactory(inputObj, outputObj);
+			await converter(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
 			console.error(`${err}`);
@@ -185,7 +185,7 @@ export function fileInput() {
 		try {
 			const inputObj = new dataObj(inputType, fileData.data);
 			const outputObj = new dataObj(outputType);
-			parseFactory(inputObj, outputObj);
+			converter(inputObj, outputObj);
 			console.log(outputObj);
 		} catch (err) {
 			console.error(`${err}`);

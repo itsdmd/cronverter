@@ -4,33 +4,39 @@ import * as parseJson from "./parseJson";
 // import { parseIcs } from "./parseIcs";
 
 /**
- * Factory for parsing input data
- * @param {dataObj} input
- * @param {dataObj} output
+ * Type conversion factory
+ * @example
+ * const inputObj = new dataObj(dataFormat.CRON, "* * * * * echo hello");
+ * const outputObj = new dataObj(dataFormat.JSON);
+ * converter(input, output);		// output.data = '[{"time":"* * * * *","cmd":"echo hello","username":null}]'
+ * @param {dataObj} inputObj
+ * @param {dataObj} outputObj
+ * @param {boolean} hasUsernameField
+ * @returns {Promise<void>}
  */
-export async function parseFactory(input, output, hasUsernameField = false) {
+export async function converter(inputObj, outputObj, hasUsernameField = false) {
 	// convert input data to ICA
 	let interData = null;
 
-	switch (input.format) {
+	switch (inputObj.format) {
 		case dataFormat.ICA:
 			break;
 		case dataFormat.CRON:
-			interData = parseCron.parseCron(input.data, hasUsernameField);
+			interData = parseCron.parseCron(inputObj.data, hasUsernameField);
 			break;
 		case dataFormat.URL_CRON:
 			interData = await new Promise((resolve) => {
-				parseCron.parseUrlCron(input.data, hasUsernameField).then((data) => {
+				parseCron.parseUrlCron(inputObj.data, hasUsernameField).then((data) => {
 					resolve(data);
 				});
 			});
 			break;
 		case dataFormat.JSON:
-			interData = parseJson.parseJsonStr(input.data);
+			interData = parseJson.parseJsonStr(inputObj.data);
 			break;
 		case dataFormat.URL_JSON:
 			interData = await new Promise((resolve) => {
-				parseJson.parseUrlJson(input.data).then((data) => {
+				parseJson.parseUrlJson(inputObj.data).then((data) => {
 					resolve(data);
 				});
 			});
@@ -43,15 +49,15 @@ export async function parseFactory(input, output, hasUsernameField = false) {
 	}
 
 	// convert ICA to output data
-	switch (output.format) {
+	switch (outputObj.format) {
 		case dataFormat.ICA:
-			output.data = interData;
+			outputObj.data = interData;
 			break;
 		case dataFormat.CRON:
-			output.data = parseCron.parseToCron(interData);
+			outputObj.data = parseCron.parseToCron(interData);
 			break;
 		case dataFormat.JSON:
-			output.data = parseJson.parseToJsonStr(interData);
+			outputObj.data = parseJson.parseToJsonStr(interData);
 			break;
 		case dataFormat.ICS:
 			// output.data = parseToIcs(interData);

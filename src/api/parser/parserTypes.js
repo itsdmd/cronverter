@@ -25,11 +25,11 @@ export class dataFormat {
 export class dataObj {
 	/**
 	 * An object containing the data and its format.
-	 * @param {dataFormat} format
-	 * @param {any} data
 	 * @example new dataObj(dataFormat.ICA, [["* * * * *", "echo hello", null]])
 	 * @example new dataObj(dataFormat.CRON, "* * * * * sh echo hello", true)
 	 * @example new dataObj(dataFormat.URL_CRON, "https://example.com/cron.txt")
+	 * @param {dataFormat} format
+	 * @param {any} data
 	 */
 	constructor(format, data = null) {
 		this.format = format;

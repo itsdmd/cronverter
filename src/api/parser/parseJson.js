@@ -2,10 +2,10 @@ import { fetchPlain } from "../fetcher/fetcher";
 
 /**
  * Convert JSON plain string into ICA
- * @param {string} inputStr
- * @returns {string[][]}
  * @example parseJsonStr('{"time":"* * * * *","cmd":"echo hello","username":null}')
  * @example parseJsonStr('{"0":{"time":"* * * * *","cmd":"echo su says hello","username":su},"1":{"time":"*\/2 * * * *","cmd":"echo goodbye from sudo","username":sudo}}')
+ * @param {string} inputStr
+ * @returns {string[][]}
  */
 export function parseJsonStr(inputStr) {
 	const inputObj = JSON.parse(inputStr);
