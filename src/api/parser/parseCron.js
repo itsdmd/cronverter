@@ -2,7 +2,7 @@
 import { fetchPlain } from "../fetcher/fetcher";
 
 /**
- * Convert cron into ICA
+ * Convert CRON into ICA
  * @param {string} inputStr
  * @param {boolean} hasUsernameField
  * @returns {string[][]}
@@ -50,7 +50,7 @@ export function parseCron(inputStr, hasUsernameField = false) {
 }
 
 /**
- * Convert cron data fetched from URL into ICA
+ * Convert CRON data fetched from URL into ICA
  * @param {string} url
  * @param {boolean} hasUsernameField
  * @returns {string[][]}
@@ -63,7 +63,7 @@ export async function parseUrlCron(url, hasUsernameField = false) {
 }
 
 /**
- * Parse ICA into cron
+ * Parse ICA into CRON
  * @param {string[][]} inputData
  * @returns {string}
  */
