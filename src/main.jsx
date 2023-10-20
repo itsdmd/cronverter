@@ -4,8 +4,8 @@ import * as input from "./components/input.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
-		<input.plainTextInput />
-		<input.urlInput />
-		<input.fileInput />
+		<input.PlainTextInput />
+		<input.UrlInput />
+		<input.FileInput />
 	</React.StrictMode>
 );

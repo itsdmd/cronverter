@@ -2,7 +2,7 @@ import { useState } from "react";
 import { dataType, dataObj } from "../api/parser/parserTypes";
 import { converter } from "../api/parser/converter";
 
-export function plainTextInput() {
+export function PlainTextInput() {
 	const [inputValue, setInputValue] = useState("");
 	const [inputType, setInputType] = useState(dataType.CRON);
 	const [outputType, setOutputType] = useState(dataType.JSON);
@@ -92,7 +92,7 @@ export function plainTextInput() {
 	);
 }
 
-export function urlInput() {
+export function UrlInput() {
 	const [inputValue, setInputValue] = useState("");
 	const [inputType, setInputType] = useState(dataType.URL_CRON);
 	const [outputType, setOutputType] = useState(dataType.JSON);
@@ -182,7 +182,7 @@ export function urlInput() {
 	);
 }
 
-export function fileInput() {
+export function FileInput() {
 	const [fileData, setFileData] = useState(null);
 	const [inputType, setInputType] = useState(dataType.CRON);
 	const [outputType, setOutputType] = useState(dataType.JSON);
