@@ -2,7 +2,7 @@
  * Available options: `ICA`, `CRON`, `JSON`, `ICS`.
  * @example dataFormat.ICA
  */
-export class dataFormat {
+export class dataType {
 	/**
 	 * *Intermediate Conversion Array*, a 2D string array with the following structure:
 	 * `[ [time, username, cmd], [time, username, cmd], ... ]`.
@@ -28,7 +28,7 @@ export class dataObj {
 	 * @example new dataObj(dataFormat.ICA, [["* * * * *", "echo hello", null]])
 	 * @example new dataObj(dataFormat.CRON, "* * * * * sh echo hello", true)
 	 * @example new dataObj(dataFormat.URL_CRON, "https://example.com/cron.txt")
-	 * @param {dataFormat} format
+	 * @param {dataType} format
 	 * @param {any} data
 	 */
 	constructor(format, data = null) {

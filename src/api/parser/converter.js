@@ -1,4 +1,4 @@
-import { dataFormat, dataObj } from "./parserTypes";
+import { dataType, dataObj } from "./parserTypes";
 import * as parseCron from "./parseCron";
 import * as parseJson from "./parseJson";
 // import { parseIcs } from "./parseIcs";
@@ -19,29 +19,29 @@ export async function converter(inputObj, outputObj, hasUsernameField = false) {
 	let interData = null;
 
 	switch (inputObj.format) {
-		case dataFormat.ICA:
+		case dataType.ICA:
 			break;
-		case dataFormat.CRON:
+		case dataType.CRON:
 			interData = parseCron.parseCron(inputObj.data, hasUsernameField);
 			break;
-		case dataFormat.URL_CRON:
+		case dataType.URL_CRON:
 			interData = await new Promise((resolve) => {
 				parseCron.parseUrlCron(inputObj.data, hasUsernameField).then((data) => {
 					resolve(data);
 				});
 			});
 			break;
-		case dataFormat.JSON:
+		case dataType.JSON:
 			interData = parseJson.parseJsonStr(inputObj.data);
 			break;
-		case dataFormat.URL_JSON:
+		case dataType.URL_JSON:
 			interData = await new Promise((resolve) => {
 				parseJson.parseUrlJson(inputObj.data).then((data) => {
 					resolve(data);
 				});
 			});
 			break;
-		case dataFormat.ICS:
+		case dataType.ICS:
 			// interData = parseIcs(input.data, hasUsernameField);
 			break;
 		default:
@@ -50,16 +50,16 @@ export async function converter(inputObj, outputObj, hasUsernameField = false) {
 
 	// convert ICA to output data
 	switch (outputObj.format) {
-		case dataFormat.ICA:
+		case dataType.ICA:
 			outputObj.data = interData;
 			break;
-		case dataFormat.CRON:
+		case dataType.CRON:
 			outputObj.data = parseCron.parseToCron(interData);
 			break;
-		case dataFormat.JSON:
+		case dataType.JSON:
 			outputObj.data = parseJson.parseToJsonStr(interData);
 			break;
-		case dataFormat.ICS:
+		case dataType.ICS:
 			// output.data = parseToIcs(interData);
 			break;
 		default:

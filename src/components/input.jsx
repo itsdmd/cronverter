@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { dataFormat, dataObj } from "../api/parser/parserTypes";
+import { dataType, dataObj } from "../api/parser/parserTypes";
 import { converter } from "../api/parser/converter";
 
 export function plainTextInput() {
 	const [inputValue, setInputValue] = useState("");
-	const [inputType, setInputType] = useState(dataFormat.CRON);
-	const [outputType, setOutputType] = useState(dataFormat.JSON);
+	const [inputType, setInputType] = useState(dataType.CRON);
+	const [outputType, setOutputType] = useState(dataType.JSON);
+	const [downloadLink, setDownloadLink] = useState(null);
+	const [showToast, setShowToast] = useState(false);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -14,6 +16,15 @@ export function plainTextInput() {
 			const outputObj = new dataObj(outputType);
 			converter(inputObj, outputObj);
 			console.log(outputObj);
+
+			navigator.clipboard.writeText(outputObj.data);
+
+			const blob = new Blob([outputObj.data], { type: "text/plain" });
+			const url = URL.createObjectURL(blob);
+			setDownloadLink(url);
+
+			setShowToast(true);
+			setTimeout(() => setShowToast(false), 3000);
 		} catch (err) {
 			console.error(`${err}`);
 		}
@@ -40,9 +51,9 @@ export function plainTextInput() {
 						value={inputType}
 						onChange={handleInputTypeSelectChange}
 					>
-						<option value={dataFormat.CRON}>CRON</option>
-						<option value={dataFormat.JSON}>JSON</option>
-						<option value={dataFormat.ICS}>ICS / ICAL</option>
+						<option value={dataType.CRON}>CRON</option>
+						<option value={dataType.JSON}>JSON</option>
+						<option value={dataType.ICS}>ICS / ICAL</option>
 					</select>
 				</label>
 				<label>
@@ -51,9 +62,9 @@ export function plainTextInput() {
 						value={outputType}
 						onChange={handleOutputTypeSelectChange}
 					>
-						<option value={dataFormat.CRON}>CRON</option>
-						<option value={dataFormat.JSON}>JSON</option>
-						<option value={dataFormat.ICS}>ICS / ICAL</option>
+						<option value={dataType.CRON}>CRON</option>
+						<option value={dataType.JSON}>JSON</option>
+						<option value={dataType.ICS}>ICS / ICAL</option>
 					</select>
 				</label>
 				<label>
@@ -66,14 +77,27 @@ export function plainTextInput() {
 				</label>
 				<button type="submit">Submit</button>
 			</form>
+			{downloadLink && (
+				<div>
+					<a
+						href={downloadLink}
+						download="output.txt"
+					>
+						Download
+					</a>
+				</div>
+			)}
+			{showToast && <div>Output copied to clipboard!</div>}
 		</div>
 	);
 }
 
 export function urlInput() {
 	const [inputValue, setInputValue] = useState("");
-	const [inputType, setInputType] = useState(dataFormat.URL_CRON);
-	const [outputType, setOutputType] = useState(dataFormat.JSON);
+	const [inputType, setInputType] = useState(dataType.URL_CRON);
+	const [outputType, setOutputType] = useState(dataType.JSON);
+	const [downloadLink, setDownloadLink] = useState(null);
+	const [showToast, setShowToast] = useState(false);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -82,6 +106,15 @@ export function urlInput() {
 			const outputObj = new dataObj(outputType);
 			await converter(inputObj, outputObj);
 			console.log(outputObj);
+
+			navigator.clipboard.writeText(outputObj.data);
+
+			const blob = new Blob([outputObj.data], { type: "text/plain" });
+			const url = URL.createObjectURL(blob);
+			setDownloadLink(url);
+
+			setShowToast(true);
+			setTimeout(() => setShowToast(false), 3000);
 		} catch (err) {
 			console.error(`${err}`);
 		}
@@ -108,9 +141,9 @@ export function urlInput() {
 						value={inputType}
 						onChange={handleInputTypeSelectChange}
 					>
-						<option value={dataFormat.URL_CRON}>CRON</option>
-						<option value={dataFormat.URL_JSON}>JSON</option>
-						<option value={dataFormat.URL_ICS}>ICS / ICAL</option>
+						<option value={dataType.URL_CRON}>CRON</option>
+						<option value={dataType.URL_JSON}>JSON</option>
+						<option value={dataType.URL_ICS}>ICS / ICAL</option>
 					</select>
 				</label>
 				<label>
@@ -119,9 +152,9 @@ export function urlInput() {
 						value={outputType}
 						onChange={handleOutputTypeSelectChange}
 					>
-						<option value={dataFormat.CRON}>CRON</option>
-						<option value={dataFormat.JSON}>JSON</option>
-						<option value={dataFormat.ICS}>ICS / ICAL</option>
+						<option value={dataType.CRON}>CRON</option>
+						<option value={dataType.JSON}>JSON</option>
+						<option value={dataType.ICS}>ICS / ICAL</option>
 					</select>
 				</label>
 				<label>
@@ -134,14 +167,27 @@ export function urlInput() {
 				</label>
 				<button type="submit">Submit</button>
 			</form>
+			{downloadLink && (
+				<div>
+					<a
+						href={downloadLink}
+						download="output.txt"
+					>
+						Download
+					</a>
+				</div>
+			)}
+			{showToast && <div>Output copied to clipboard!</div>}
 		</div>
 	);
 }
 
 export function fileInput() {
 	const [fileData, setFileData] = useState(null);
-	const [inputType, setInputType] = useState(dataFormat.CRON);
-	const [outputType, setOutputType] = useState(dataFormat.JSON);
+	const [inputType, setInputType] = useState(dataType.CRON);
+	const [outputType, setOutputType] = useState(dataType.JSON);
+	const [downloadLink, setDownloadLink] = useState(null);
+	const [showToast, setShowToast] = useState(false);
 
 	const handleDrop = (event) => {
 		event.preventDefault();
@@ -187,6 +233,15 @@ export function fileInput() {
 			const outputObj = new dataObj(outputType);
 			converter(inputObj, outputObj);
 			console.log(outputObj);
+
+			navigator.clipboard.writeText(outputObj.data);
+
+			const blob = new Blob([outputObj.data], { type: "text/plain" });
+			const url = URL.createObjectURL(blob);
+			setDownloadLink(url);
+
+			setShowToast(true);
+			setTimeout(() => setShowToast(false), 3000);
 		} catch (err) {
 			console.error(`${err}`);
 		}
@@ -208,8 +263,19 @@ export function fileInput() {
 					<button onClick={handleSubmit}>Submit</button>
 					<button onClick={handleClear}>Clear</button>
 					<h3>File Name: {fileData.name}</h3>
-					<h3>File Data: </h3>
-					<pre>{fileData.data}</pre>
+					{/* <h3>File Data: </h3>
+					<pre>{fileData.data}</pre> */}
+					{downloadLink && (
+						<div>
+							<a
+								href={downloadLink}
+								download="output.txt"
+							>
+								Download
+							</a>
+						</div>
+					)}
+					{showToast && <div>Output copied to clipboard!</div>}
 				</div>
 			) : (
 				<div>
@@ -219,9 +285,9 @@ export function fileInput() {
 							value={inputType}
 							onChange={handleInputTypeSelectChange}
 						>
-							<option value={dataFormat.CRON}>CRON</option>
-							<option value={dataFormat.JSON}>JSON</option>
-							<option value={dataFormat.ICS}>ICS / ICAL</option>
+							<option value={dataType.CRON}>CRON</option>
+							<option value={dataType.JSON}>JSON</option>
+							<option value={dataType.ICS}>ICS / ICAL</option>
 						</select>
 					</label>
 					<label>
@@ -230,9 +296,9 @@ export function fileInput() {
 							value={outputType}
 							onChange={handleOutputTypeSelectChange}
 						>
-							<option value={dataFormat.CRON}>CRON</option>
-							<option value={dataFormat.JSON}>JSON</option>
-							<option value={dataFormat.ICS}>ICS / ICAL</option>
+							<option value={dataType.CRON}>CRON</option>
+							<option value={dataType.JSON}>JSON</option>
+							<option value={dataType.ICS}>ICS / ICAL</option>
 						</select>
 					</label>
 					<h3>Drop a file here</h3>
